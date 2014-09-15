@@ -1,0 +1,34 @@
+{
+  "name": "famous-columnlayout",
+  "version": "0.1.0",
+  "description": "Column-based layout for famo.us",
+  "main": "ColumnLayout.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/metarouter/famous-columnlayout.git"
+  },
+  "author": "Arturas Lebedevas <metarouter@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/metarouter/famous-columnlayout/issues"
+  },
+  "homepage": "https://github.com/metarouter/famous-columnlayout",
+  "private": true,
+  "dependencies": {
+    "famous": "^0.2.2"
+  },
+  "devDependencies": {
+    "async": "^0.9.0",
+    "browserify": "^5.11.0",
+    "glob": "^4.0.5",
+    "gulp": "^3.8.7",
+    "gulp-rimraf": "^0.1.0",
+    "gulp-util": "^3.0.1",
+    "gulp-webserver": "^0.7.2",
+    "vinyl-source-stream": "^0.1.1",
+    "watchify": "^1.0.2"
+  }
+}
