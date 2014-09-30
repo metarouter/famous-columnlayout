@@ -1,24 +1,40 @@
-var View = require('famous/core/View');
+var OptionsManager = require('famous/core/OptionsManager'),
+    Entity         = require('famous/core/Entity');
 
-function ColumnLayout () {
-  View.apply(this, arguments);
+function ColumnLayout (options) {
+  this.options = Object.create(ColumnLayout.DEFAULT_OPTIONS);
+  this.optionsManager = new OptionsManager(this.options);
+  if (options) {
+    this.setOptions(options);
+  }
 
-  this._items = [];
+  this.id = Entity.register(this);
 }
-
-ColumnLayout.prototype = Object.create(View.prototype);
-ColumnLayout.prototype.constructor = ColumnLayout;
 
 ColumnLayout.DEFAULT_OPTIONS = {};
 
 module.exports = ColumnLayout;
 
-ColumnLayout.prototype.sequenceFromArray = function (array) {
-  array.forEach(_addItem.bind(this));
+ColumnLayout.prototype.render = function () {
+  return this.id;
 };
 
-function _addItem (item) {
-  var items = this._items;
+ColumnLayout.prototype.setOptions = function (options) {
+  return this.optionsManager.setOptions(options);
+};
 
-  items.push(item);
-}
+ColumnLayout.prototype.commit = function (context) {
+  var transform = context.transform,
+      opacity   = context.opacity,
+      origin    = context.origin,
+      size      = context.size;
+  var result = [];
+
+  return {
+    transform: transform,
+    opacity: opacity,
+    origin: origin,
+    size: size,
+    target: result
+  };
+};
