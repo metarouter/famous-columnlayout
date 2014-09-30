@@ -19,7 +19,7 @@ Cell.DEFAULT_OPTIONS = {
 
 module.exports = Cell;
 
-Cell.prototype.getSize = function () {
+Cell.prototype.getColumnSize = function () {
   return this.options.size;
 };
 
