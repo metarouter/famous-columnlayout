@@ -14,13 +14,13 @@ Cell.prototype.constructor = Cell;
 Cell.DEFAULT_OPTIONS = {
   // Cell size is measured in number of columns
   // By default, cell spans across one column
-  size: 1
+  cellSize: 1
 };
 
 module.exports = Cell;
 
 Cell.prototype.getColumnSize = function () {
-  return this.options.size;
+  return this.options.cellSize;
 };
 
 function _setupNode () {
