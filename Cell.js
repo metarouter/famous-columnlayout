@@ -1,7 +1,11 @@
-var View = require('famous/core/View');
+var View       = require('famous/core/View'),
+    RenderNode = require('famous/core/RenderNode'),
+    Modifier   = require('famous/core/Modifier');
 
 function Cell () {
   View.apply(this, arguments);
+
+  _setupNode.call(this);
 }
 
 Cell.prototype = Object.create(View.prototype);
@@ -18,3 +22,11 @@ module.exports = Cell;
 Cell.prototype.getSize = function () {
   return this.options.size;
 };
+
+function _setupNode () {
+  var rootModifier = new Modifier();
+  var node = new RenderNode(rootModifier);
+
+  this._rootModifier = rootModifier;
+  this._node = node;
+}
