@@ -14,7 +14,10 @@ function ColumnLayout (options) {
   this.sequence = null;
 }
 
-ColumnLayout.DEFAULT_OPTIONS = {};
+ColumnLayout.DEFAULT_OPTIONS = {
+  columnWidth: 320,
+  singleColumnWidth: undefined
+};
 
 module.exports = ColumnLayout;
 
