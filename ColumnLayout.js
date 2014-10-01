@@ -12,6 +12,9 @@ function ColumnLayout (options) {
   this.id = Entity.register(this);
 
   this.sequence = null;
+  this._cache = {
+    size: [0, 0]
+  };
 }
 
 ColumnLayout.DEFAULT_OPTIONS = {
@@ -41,7 +44,14 @@ ColumnLayout.prototype.commit = function (context) {
       opacity   = context.opacity,
       origin    = context.origin,
       size      = context.size;
+  var cache     = this._cache,
+      sizeCache = cache.size;
   var result = [];
+
+  var sizeChanged = (sizeCache[0] !== size[0] || sizeCache[1] !== size[1]);
+  if (sizeChanged) {
+    _reflow.call(this, size);
+  }
 
   return {
     transform: transform,
@@ -51,3 +61,9 @@ ColumnLayout.prototype.commit = function (context) {
     target: result
   };
 };
+
+function _reflow (size) {
+  var cache = this._cache;
+
+  cache.size = [size[0], size[1]];
+}
