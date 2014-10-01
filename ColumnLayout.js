@@ -15,11 +15,13 @@ function ColumnLayout (options) {
   this._cache = {
     size: [0, 0]
   };
+  this._modifiers = [];
+  this._states = [];
+  this._numOfColumns = 0;
 }
 
 ColumnLayout.DEFAULT_OPTIONS = {
-  columnWidth: 320,
-  singleColumnWidth: undefined
+  columnWidth: 320
 };
 
 module.exports = ColumnLayout;
@@ -64,6 +66,21 @@ ColumnLayout.prototype.commit = function (context) {
 
 function _reflow (size) {
   var cache = this._cache;
+  var sequence = this.sequence;
+  var opts = this.options;
+  var width = size[0];
+
+  this._numOfColumns = ~~(width / opts.columnWidth);
 
   cache.size = [size[0], size[1]];
+}
+
+function forEachSequence (sequence, cb) {
+  while (sequence) {
+    var item = sequence.get(),
+        idx  = sequence.getIndex();
+
+    cb(item, idx, sequence);
+    sequence = sequence.getNext();
+  }
 }
