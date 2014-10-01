@@ -1,4 +1,5 @@
 var OptionsManager = require('famous/core/OptionsManager'),
+    ViewSequence   = require('famous/core/ViewSequence'),
     Entity         = require('famous/core/Entity');
 
 function ColumnLayout (options) {
@@ -9,6 +10,8 @@ function ColumnLayout (options) {
   }
 
   this.id = Entity.register(this);
+
+  this.sequence = null;
 }
 
 ColumnLayout.DEFAULT_OPTIONS = {};
@@ -21,6 +24,13 @@ ColumnLayout.prototype.render = function () {
 
 ColumnLayout.prototype.setOptions = function (options) {
   return this.optionsManager.setOptions(options);
+};
+
+ColumnLayout.prototype.sequenceFrom = function (sequence) {
+  if (sequence instanceof Array) {
+    sequence = new ViewSequence(sequence);
+  }
+  this.sequence = sequence;
 };
 
 ColumnLayout.prototype.commit = function (context) {
