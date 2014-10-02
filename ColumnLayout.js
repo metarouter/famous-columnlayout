@@ -12,7 +12,7 @@ function ColumnLayout (options) {
 
   this.sequence = null;
   this.id = Entity.register(this);
-  this._size = new Transitionable([0, 0]);
+  this._contextSize = new Transitionable([0, 0]);
 }
 
 ColumnLayout.DEFAULT_OPTIONS = {
@@ -27,7 +27,7 @@ ColumnLayout.prototype.render = function () {
 
 ColumnLayout.prototype.commit = function (context) {
   var size           = context.size,
-      sizeCache      = this._size.get(),
+      sizeCache      = this._contextSize.get(),
       sizeHasChanged = (size[0] !== size[0]);
 
   if (sizeHasChanged) {
