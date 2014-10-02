@@ -1,24 +1,49 @@
-var View = require('famous/core/View');
+var OptionsManager = require('famous/core/OptionsManager'),
+    Entity         = require('famous/core/Entity'),
+    ViewSequence   = require('famous/core/ViewSequence');
+var Transitionable = require('famous/transitions/Transitionable');
 
-function ColumnLayout () {
-  View.apply(this, arguments);
+function ColumnLayout (options) {
+  this.options = Object.create(ColumnLayout.DEFAULT_OPTIONS);
+  this.optionsManager = new OptionsManager(this.options);
+  if (options) {
+    this.setOptions(options);
+  }
 
-  this._items = [];
+  this.sequence = null;
+  this.id = Entity.register(this);
+  this._size = new Transitionable([0, 0]);
 }
 
-ColumnLayout.prototype = Object.create(View.prototype);
-ColumnLayout.prototype.constructor = ColumnLayout;
-
-ColumnLayout.DEFAULT_OPTIONS = {};
+ColumnLayout.DEFAULT_OPTIONS = {
+  columnWidth: 320
+};
 
 module.exports = ColumnLayout;
 
-ColumnLayout.prototype.sequenceFromArray = function (array) {
-  array.forEach(_addItem.bind(this));
+ColumnLayout.prototype.render = function () {
+  return this.id;
 };
 
-function _addItem (item) {
-  var items = this._items;
+ColumnLayout.prototype.commit = function (context) {
+  var size           = context.size,
+      sizeCache      = this._size.get(),
+      sizeHasChanged = (size[0] !== size[0]);
 
-  items.push(item);
-}
+  if (sizeHasChanged) {
+    // TODO Reflow
+  }
+
+  return [];
+};
+
+ColumnLayout.prototype.setOptions = function (options) {
+  return this.optionsManager.setOptions(options);
+};
+
+ColumnLayout.prototype.sequenceFrom = function (sequence) {
+  if (sequence instanceof Array) {
+    sequence = new ViewSequence(sequence);
+  }
+  this.sequence = sequence;
+};
