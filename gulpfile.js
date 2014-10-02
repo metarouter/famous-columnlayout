@@ -60,6 +60,7 @@ gulp.task('http', function () {
       .pipe(webserver({
         livereload: true,
         directoryListing: true,
+        host: '0.0.0.0',
         port: DEFAULT_PORT
       }));
 });
