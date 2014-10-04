@@ -16,7 +16,8 @@ function ColumnLayout (options) {
 }
 
 ColumnLayout.DEFAULT_OPTIONS = {
-  columnWidth: 320
+  columnWidth: 320,
+  transition: undefined
 };
 
 module.exports = ColumnLayout;
@@ -26,12 +27,13 @@ ColumnLayout.prototype.render = function () {
 };
 
 ColumnLayout.prototype.commit = function (context) {
-  var size           = context.size,
-      sizeCache      = this._contextSize.get(),
-      sizeHasChanged = (size[0] !== size[0]);
+  var contextSize    = context.size,
+      size           = this._contextSize,
+      sizeCache      = size.get(),
+      sizeHasChanged = (sizeCache[0] !== contextSize[0]);
 
   if (sizeHasChanged) {
-    // TODO Reflow
+    size.set([contextSize[0], contextSize[1]], this.options.transition);
   }
 
   return [];
