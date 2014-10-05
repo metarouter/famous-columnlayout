@@ -14,6 +14,7 @@ function ColumnLayout (options) {
   }
 
   this.sequence = null;
+  this._layoutCreated = false;
   this.id = Entity.register(this);
   this._modifiers = [];
   this._cells = [];
@@ -37,6 +38,9 @@ ColumnLayout.prototype.commit = function (context) {
       sizeCache      = this._contextSize,
       sizeHasChanged = (sizeCache[0] !== contextSize[0]);
 
+  if (! this._layoutCreated) {
+    createLayout.call(this);
+  }
   if (sizeHasChanged) {
     this._contextSize = [contextSize[0], contextSize[1]];
     reflow.call(this);
@@ -64,8 +68,6 @@ ColumnLayout.prototype.sequenceFrom = function (sequence) {
   }
   this.sequence = sequence;
   this._cells = [];
-
-  createLayout.call(this);
 };
 
 function reflow () {
@@ -131,6 +133,7 @@ function createLayout () {
   forEachSequenceItem(sequence, function () {
     createModifier.apply(this, arguments);
     positionItemInLayout.apply(this, arguments);
+    this._layoutCreated = true;
   }.bind(this));
 }
 
