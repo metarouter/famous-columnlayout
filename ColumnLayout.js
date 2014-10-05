@@ -135,6 +135,8 @@ function createLayout () {
 }
 
 function positionItemInLayout (item, index, previousItem) {
+  if (! item) { return; }
+
   var opts = this.options;
 
   var modifier       = this._modifiers[index],
