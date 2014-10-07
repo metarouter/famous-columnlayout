@@ -38,6 +38,11 @@ var surface_4 = new Surface({
 //surface_3.getCellColumnSize = function () { return 2; };
 var cells = [surface, surface_2, surface_3, surface_4];
 var layout = new ColumnLayout({
+  columnWidth: 220,
+  transition: {
+    duration: 500,
+    curve: 'easeOut'
+  }
 });
 window.layout = layout;
 
