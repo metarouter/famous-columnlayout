@@ -13,6 +13,7 @@ function ColumnLayout () {
 
   this.id = Entity.register(this);
   this.sequence = null;
+  this._cellHeight = [];
   this._initialized = false;
   this._contextSize = [0, 0];
   this._modifiers = [];
@@ -32,6 +33,7 @@ module.exports = ColumnLayout;
 ColumnLayout.prototype.sequenceFrom = function (sequence) {
   if (sequence instanceof Array) { sequence = new ViewSequence(sequence); }
   this.sequence = sequence;
+  this._cellHeight = [];
 };
 
 ColumnLayout.prototype.render = function () {
@@ -42,13 +44,13 @@ ColumnLayout.prototype.commit = function (context) {
   var widthChanged = (this._contextSize[0] !== context.size[0]);
 
   if (this._initialized && widthChanged) {
-    reflow.call(this, context.size);
+    this.reflow(context.size);
     this._contextSize = [context.size[0], context.size[1]];
   }
 
   var res = iterateSequence(this.sequence, function (item, index) {
     if ( !this._states[index] && !this._modifiers[index] ) {
-      createModifier.call(this, index, [0, 0, 0]);
+      createModifier.call(this, index, [0, 0, 0], context.size);
     }
 
     return this._modifiers[index].modify({
@@ -60,7 +62,9 @@ ColumnLayout.prototype.commit = function (context) {
   return res;
 };
 
-function reflow (size) {
+ColumnLayout.prototype.reflow = function (size) {
+  size = size || this._contextSize;
+
   var states = this._states;
   var modifiers = this._modifiers;
   var transition = this.options.transition;
@@ -78,6 +82,7 @@ function reflow (size) {
         yPos = columnHeights[column];
 
     columnHeights[column] += itemHeight;
+    this._cellHeight[index] = itemHeight;
 
     state.size.halt();
     state.transform.halt();
@@ -85,15 +90,21 @@ function reflow (size) {
     state.size.set([columnWidth, state.size.get()[1]], transition);
     state.transform.setTranslate([xPos, yPos], transition);
   }.bind(this));
-}
+};
 
-function createModifier (index, position) {
+function createModifier (index, position, contextSize) {
   var state = {
     size: new Transitionable([this.options.columnWidth, true]),
     transform: new TransitionableTransform(Transform.translate.apply(null, position))
   };
   var modifier = new Modifier({
-    size: state.size,
+    size: function () {
+      var size = this.sequence._.array[index].getSize(true) || NULL_CELL;
+      if (size[1] !== this._cellHeight[index] && this._initialized) {
+        this.reflow(contextSize);
+      }
+      return state.size.get();
+    }.bind(this),
     transform: state.transform
   });
 
