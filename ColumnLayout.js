@@ -61,7 +61,7 @@ ColumnLayout.prototype.commit = function (context) {
 
   this._initialized = true;
   return {
-    transform: context.transfom,
+    transform: context.transform,
     opacity: context.opacity,
     target: res
   };
