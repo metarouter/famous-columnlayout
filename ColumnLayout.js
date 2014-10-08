@@ -54,19 +54,23 @@ ColumnLayout.prototype.commit = function (context) {
     }
 
     return this._modifiers[index].modify({
+      origin: context.origin,
       target: item.render()
     });
   }.bind(this));
 
   this._initialized = true;
-  return res;
+  return {
+    transform: context.transfom,
+    opacity: context.opacity,
+    target: res
+  };
 };
 
 ColumnLayout.prototype.reflow = function (size) {
   size = size || this._contextSize;
 
   var states = this._states;
-  var modifiers = this._modifiers;
   var transition = this.options.transition;
 
   var width = size[0];
