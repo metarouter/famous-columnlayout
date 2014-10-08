@@ -48,6 +48,7 @@ ColumnLayout.prototype.commit = function (context) {
     this._contextSize = [context.size[0], context.size[1]];
   }
 
+  if (this.sequence._.array.length === 0) { return []; }
   var res = iterateSequence(this.sequence, function (item, index) {
     if ( !this._states[index] && !this._modifiers[index] ) {
       createModifier.call(this, index, [0, 0, 0], context.size);
